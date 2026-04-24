@@ -9,7 +9,9 @@ export async function middleware(req) {
 
   // Si el usuario NO está logueado, lo mandamos al login
   if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   // Si el usuario está logueado pero NO es admin e intenta entrar a /admin

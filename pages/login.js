@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
+  const callbackUrl =
+    typeof router.query.callbackUrl === "string" ? router.query.callbackUrl : "/";
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
@@ -22,6 +24,7 @@ export default function LoginPage() {
       email: formData.email,
       password: formData.password,
       redirect: false,
+      callbackUrl,
     });
 
     setLoading(false);
@@ -30,7 +33,7 @@ export default function LoginPage() {
       toast.error("Email o contraseña incorrectos");
     } else {
       toast.success("¡Bienvenida de vuelta!");
-      router.push("/");
+      router.push(result?.url || callbackUrl);
     }
   };
 
