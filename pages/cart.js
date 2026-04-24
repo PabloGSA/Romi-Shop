@@ -30,7 +30,6 @@ export default function CartPage() {
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.message);
 
       clearCart();
@@ -41,15 +40,19 @@ export default function CartPage() {
     }
   };
 
+  // Carrito vacio
   if (items.length === 0) {
     return (
       <Layout>
-        <div className="text-center py-20">
-          <p className="text-6xl mb-4">🛒</p>
-          <h2 className="text-2xl font-semibold text-gray-700 mb-2">Tu carrito está vacío</h2>
-          <p className="text-gray-400 mb-6">Agrega algunos productos para comenzar</p>
-          <Link href="/" className="bg-rose-500 text-white px-6 py-3 rounded-full hover:bg-rose-600 transition">
-            Ver productos
+        <div className="text-center py-32">
+          <p className="text-xs uppercase tracking-widest text-gray-400 mb-6">Tu carrito</p>
+          <h2 className="text-2xl font-light text-gray-900 mb-4">Tu carrito está vacío</h2>
+          <p className="text-gray-400 text-sm mb-10">Explora nuestra colección y agrega algo especial</p>
+          <Link
+            href="/"
+            className="border border-black text-black px-10 py-3 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition"
+          >
+            Ver colección
           </Link>
         </div>
       </Layout>
@@ -58,52 +61,78 @@ export default function CartPage() {
 
   return (
     <Layout>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">
-        Tu carrito ({totalItems} {totalItems === 1 ? "artículo" : "artículos"})
-      </h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-4">
+      {/* Encabezado */}
+      <div className="border-b border-gray-200 pb-6 mb-10">
+        <p className="text-xs uppercase tracking-widest text-gray-400 mb-1">Romi Antonucci</p>
+        <h1 className="text-3xl font-light text-gray-900 tracking-wide">
+          Tu carrito <span className="text-gray-400 text-xl">({totalItems} {totalItems === 1 ? "artículo" : "artículos"})</span>
+        </h1>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+
+        {/* Lista de productos */}
+        <div className="lg:col-span-2 space-y-0 divide-y divide-gray-100">
           {items.map((item) => (
-            <div key={item._id} className="bg-white rounded-2xl p-4 flex items-center gap-4 shadow-sm">
-              <div className="relative w-20 h-20 flex-shrink-0">
-                <Image src={item.image} alt={item.name} fill className="object-cover rounded-xl" />
+            <div key={item._id} className="flex gap-6 py-8">
+
+              {/* Imagen */}
+              <div className="relative w-28 h-28 flex-shrink-0 bg-gray-100 overflow-hidden">
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  fill
+                  className="object-cover"
+                />
               </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-800">{item.name}</h3>
-                <p className="text-rose-500 font-bold">${item.price.toFixed(2)}</p>
-                <p className="text-sm text-gray-400">Cantidad: {item.quantity}</p>
-              </div>
-              <div className="text-right">
-                <p className="font-bold text-gray-800">${(item.price * item.quantity).toFixed(2)}</p>
+
+              {/* Info del producto */}
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-gray-400 mb-1">{item.category}</p>
+                  <h3 className="text-base font-medium text-gray-900">{item.name}</h3>
+                  <p className="text-sm text-gray-500 mt-1">Cantidad: {item.quantity}</p>
+                </div>
                 <button
                   onClick={() => removeItem(item._id)}
-                  className="text-red-400 hover:text-red-600 text-sm mt-1 transition"
+                  className="text-xs uppercase tracking-widest text-gray-400 hover:text-black transition text-left w-fit border-b border-gray-300 hover:border-black pb-0.5"
                 >
                   Eliminar
                 </button>
+              </div>
+
+              {/* Precio */}
+              <div className="text-right flex-shrink-0">
+                <p className="text-base font-medium text-gray-900">
+                  ${(item.price * item.quantity).toFixed(2)}
+                </p>
+                <p className="text-xs text-gray-400 mt-1">${item.price.toFixed(2)} c/u</p>
               </div>
             </div>
           ))}
         </div>
 
+        {/* Resumen del pedido */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl p-6 shadow-sm sticky top-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Resumen del pedido</h2>
+          <div className="bg-gray-50 p-8 sticky top-6">
+            <h2 className="text-sm uppercase tracking-widest text-gray-900 font-semibold mb-6">
+              Resumen del pedido
+            </h2>
 
-            <div className="space-y-2 text-sm text-gray-600 mb-4">
+            <div className="space-y-3 text-sm text-gray-600 mb-6">
               <div className="flex justify-between">
                 <span>Subtotal</span>
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Envío</span>
-                <span className="text-green-500">Gratis</span>
+                <span className="text-gray-900">Gratis</span>
               </div>
             </div>
 
-            <div className="border-t pt-4 mb-6">
-              <div className="flex justify-between font-bold text-gray-800 text-lg">
+            <div className="border-t border-gray-200 pt-4 mb-8">
+              <div className="flex justify-between text-gray-900 font-medium text-base">
                 <span>Total</span>
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
@@ -112,14 +141,23 @@ export default function CartPage() {
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="w-full bg-rose-500 text-white py-3 rounded-xl font-semibold hover:bg-rose-600 transition disabled:opacity-50"
+              className="w-full bg-black text-white py-4 text-sm uppercase tracking-widest hover:bg-gray-800 transition disabled:opacity-50"
             >
-              {loading ? "Redirigiendo..." : "Pagar con Stripe 💳"}
+              {loading ? "Redirigiendo..." : "Proceder al pago"}
             </button>
 
-            <p className="text-xs text-center text-gray-400 mt-3">
+            <p className="text-xs text-center text-gray-400 mt-4 tracking-wide">
               Pago seguro procesado por Stripe
             </p>
+
+            <div className="mt-6 text-center">
+              <Link
+                href="/"
+                className="text-xs uppercase tracking-widest text-gray-400 hover:text-black transition border-b border-gray-300 hover:border-black pb-0.5"
+              >
+                Seguir comprando
+              </Link>
+            </div>
           </div>
         </div>
       </div>

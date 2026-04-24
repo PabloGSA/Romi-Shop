@@ -20,10 +20,15 @@ export const authOptions = {
         const isValid = await user.comparePassword(credentials.password);
         if (!isValid) throw new Error("Email o contraseña incorrectos");
 
+        // Hacemos una consulta directa con lean() para ver el documento crudo de MongoDB
+        const userCrudo = await User.findOne({ email: credentials.email }).lean();
+        console.log("Documento crudo de MongoDB:", JSON.stringify(userCrudo));
+
         return {
           id: user._id.toString(),
           name: user.name,
           email: user.email,
+          role: userCrudo.role,
         };
       },
     }),
@@ -33,11 +38,17 @@ export const authOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.id = user.id;
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
       return token;
     },
     async session({ session, token }) {
-      if (token) session.user.id = token.id;
+      if (token) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+      }
       return session;
     },
   },

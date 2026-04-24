@@ -20,6 +20,12 @@ const UserSchema = new mongoose.Schema(
       required: [true, "La contraseña es obligatoria"],
       minlength: [6, "La contraseña debe tener al menos 6 caracteres"],
     },
+    // Rol del usuario: "user" es el valor por defecto, "admin" da acceso al panel
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
   { timestamps: true }
 );
@@ -35,4 +41,9 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+// Forzamos que Mongoose use siempre el esquema actualizado
+if (mongoose.models.User) {
+  delete mongoose.models.User;
+}
+
+export default mongoose.model("User", UserSchema);

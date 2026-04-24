@@ -2,76 +2,214 @@ import connectDB from "../../../lib/mongodb";
 import Product from "../../../models/Product";
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Método no permitido" });
-  }
+  await connectDB();
 
-  try {
-    await connectDB();
+  // GET - obtener todos los productos
+  if (req.method === "GET") {
+    try {
+      const products = await Product.find({});
 
-    const products = await Product.find({});
+      // Si no hay productos cargamos los datos iniciales
+      if (products.length === 0) {
+        await Product.insertMany(SAMPLE_PRODUCTS);
+        const seeded = await Product.find({});
+        return res.status(200).json(seeded);
+      }
 
-    // Si no hay productos cargamos los datos iniciales
-    if (products.length === 0) {
-      await Product.insertMany(SAMPLE_PRODUCTS);
-      const seeded = await Product.find({});
-      return res.status(200).json(seeded);
+      return res.status(200).json(products);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error al obtener productos" });
     }
-
-    return res.status(200).json(products);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Error al obtener productos" });
   }
+
+  // POST - crear un nuevo producto
+  if (req.method === "POST") {
+    try {
+      const { name, description, price, image, category, stock } = req.body;
+
+      const newProduct = await Product.create({
+        name,
+        description,
+        price,
+        image,
+        category,
+        stock,
+      });
+
+      return res.status(201).json(newProduct);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error al crear el producto" });
+    }
+  }
+
+  return res.status(405).json({ message: "Método no permitido" });
 }
 
 const SAMPLE_PRODUCTS = [
+  // Collares
   {
-    name: "Collar de Perlas",
-    description: "Elegante collar de perlas naturales con cierre dorado",
-    price: 29.99,
-    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400",
+    name: "Collar Multicapa San Benito Azul",
+    description: "Collar multicapa con cristales azules, cuentas multicolor, dije de estrella, ojo turco y medalla de San Benito en tono dorado",
+    price: 34.99,
+    image: "/images/collares/collar-1.jpeg",
     category: "collares",
     stock: 15,
   },
   {
-    name: "Pulsera Dorada",
-    description: "Pulsera de oro laminado con detalles artesanales",
-    price: 19.99,
-    image: "https://images.unsplash.com/photo-1573408301185-9519f94815d5?w=400",
-    category: "pulseras",
-    stock: 20,
+    name: "Collar Corazón Rojo con Charms",
+    description: "Collar multicapa con cristales rojos facetados, cadena dorada con eslabones de corazón y dije de corazón inflado con charms colgantes",
+    price: 39.99,
+    image: "/images/collares/collar-2.jpeg",
+    category: "collares",
+    stock: 12,
   },
   {
-    name: "Aretes de Cristal",
-    description: "Aretes colgantes con cristales Swarovski en colores pastel",
-    price: 14.99,
-    image: "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400",
-    category: "aretes",
-    stock: 25,
-  },
-  {
-    name: "Anillo de Plata",
-    description: "Anillo de plata 925 con piedra turquesa",
-    price: 24.99,
-    image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400",
-    category: "anillos",
-    stock: 10,
-  },
-  {
-    name: "Collar Corazón",
-    description: "Delicado collar con dije de corazón en oro rosa",
-    price: 22.99,
-    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400",
+    name: "Collar LOVE Estrellas Negro",
+    description: "Collar elegante con choker de diamantes y letras LOVE doradas, cadena de estrellas y cuentas negras con medalla negra y dorada",
+    price: 29.99,
+    image: "/images/collares/collar-3.jpeg",
     category: "collares",
     stock: 18,
   },
   {
-    name: "Pulsera de Cuentas",
-    description: "Pulsera boho con cuentas de colores y macramé",
-    price: 9.99,
-    image: "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400",
+    name: "Collar Nácar San Benito Blanco",
+    description: "Collar multicapa en tonos crema y blanco con cuentas de nácar, cubos dorados y medalla de San Benito en esmalte blanco",
+    price: 32.99,
+    image: "/images/collares/collar-4.jpeg",
+    category: "collares",
+    stock: 10,
+  },
+  {
+    name: "Collar Multicapa Ojo Turco",
+    description: "Collar multicapa con cadena dorada, cuentas blancas, semillas de colores, ojo turco y medalla artesanal colgante",
+    price: 27.99,
+    image: "/images/collares/collar-5.jpeg",
+    category: "collares",
+    stock: 20,
+  },
+  // Anillos
+  {
+    name: "Set Anillos Dorados Cristal",
+    description: "Set de tres anillos dorados: banda ancha con baguettes, diseño cruzado con brillantes colgantes y solitario en forma de gota",
+    price: 24.99,
+    image: "/images/anillos/anillo-1.jpeg",
+    category: "anillos",
+    stock: 15,
+  },
+  {
+    name: "Set Anillos Multiband Dorado y Plata",
+    description: "Set de anillos statement: dona dorada con marquise, multibanda dorada y multibanda plateada con cristales incrustados",
+    price: 29.99,
+    image: "/images/anillos/anillo-2.jpeg",
+    category: "anillos",
+    stock: 12,
+  },
+  {
+    name: "Anillos Statement Esmalte Dorado",
+    description: "Anillos voluminosos con diseño abstracto en esmalte rojo y dorado, ideales para un look atrevido y urbano",
+    price: 22.99,
+    image: "/images/anillos/anillo-3.jpeg",
+    category: "anillos",
+    stock: 8,
+  },
+  {
+    name: "Set Anillos Dorados Texturizados",
+    description: "Set de anillos dorados de gran tamaño con textura irregular y diseño ondulado, estilo artístico y moderno",
+    price: 19.99,
+    image: "/images/anillos/anillo-4.jpeg",
+    category: "anillos",
+    stock: 20,
+  },
+  {
+    name: "Set Anillos Plata con Cristales",
+    description: "Set de anillos en plata oscura con diseños únicos: estrella baguette, bola pavé, cristal de roca y cuadrado con corazón dorado",
+    price: 34.99,
+    image: "/images/anillos/anillo-5.jpeg",
+    category: "anillos",
+    stock: 10,
+  },
+  // Aretes
+  {
+    name: "Aretes Corazón Pez Cristal",
+    description: "Aretes asimétricos: topo de corazón con perlas y cristales, y colgante con estructura de pez en baguettes con gota triangular",
+    price: 18.99,
+    image: "/images/aretes/arete-1.jpeg",
+    category: "aretes",
+    stock: 25,
+  },
+  {
+    name: "Aretes Flor Cristal Ahumado",
+    description: "Aretes grandes en forma de flor dorada con pétalos de cristal ahumado facetado y centro de pedrería brillante con topo de mariposa",
+    price: 24.99,
+    image: "/images/aretes/arete-2.jpeg",
+    category: "aretes",
+    stock: 20,
+  },
+  {
+    name: "Aretes Flor Dorada Pedrería",
+    description: "Aretes tipo flor en dorado con pétalos de cristal ahumado y centro pavé, perfectos para eventos especiales",
+    price: 22.99,
+    image: "/images/aretes/arete-3.jpeg",
+    category: "aretes",
+    stock: 15,
+  },
+  {
+    name: "Aretes Pétalos Nácar Baguette",
+    description: "Aretes colgantes con barra de baguettes de cristal y pétalos de nácar blanco texturizado, elegantes y femeninos",
+    price: 21.99,
+    image: "/images/aretes/arete-4.jpeg",
+    category: "aretes",
+    stock: 18,
+  },
+  {
+    name: "Aretes Orquídea Dorada",
+    description: "Aretes tipo topo en forma de orquídea dorada con textura grabada a mano, grandes y llamativos",
+    price: 19.99,
+    image: "/images/aretes/arete-5.jpeg",
+    category: "aretes",
+    stock: 22,
+  },
+  // Pulseras
+  {
+    name: "Pulsera Multicapa Sol y Estrellas",
+    description: "Set de pulseras doradas con cristales iridiscentes, perlas, dije de sol con rostro, estrella de perlas y corazón relicario",
+    price: 27.99,
+    image: "/images/pulseras/pulsera-1.jpeg",
     category: "pulseras",
-    stock: 30,
+    stock: 20,
+  },
+  {
+    name: "Pulsera Cadena Corazones Dorados",
+    description: "Pulsera de cadena gruesa dorada con múltiples dijes de corazón en relieve grabado, elegante y romántica",
+    price: 24.99,
+    image: "/images/pulseras/pulsera-2.jpeg",
+    category: "pulseras",
+    stock: 15,
+  },
+  {
+    name: "Pulsera Triple Ámbar con Corazones",
+    description: "Set de tres pulseras doradas con bolas mate, cadenas trenzadas y cristales color ámbar con dijes de corazón",
+    price: 22.99,
+    image: "/images/pulseras/pulsera-3.jpeg",
+    category: "pulseras",
+    stock: 18,
+  },
+  {
+    name: "Pulsera Cristal Corazones Dorados",
+    description: "Set de pulseras con cristales iridiscentes facetados y tres dijes de corazón inflado dorado de distintos tamaños",
+    price: 29.99,
+    image: "/images/pulseras/pulsera-4.jpeg",
+    category: "pulseras",
+    stock: 12,
+  },
+  {
+    name: "Pulsera Cuero Multicapa con Brillantes",
+    description: "Set de pulseras de cuero negro y rojo con múltiples tiras, perlas plateadas y brillantes incrustados estilo rock chic",
+    price: 19.99,
+    image: "/images/pulseras/pulsera-5.jpeg",
+    category: "pulseras",
+    stock: 25,
   },
 ];

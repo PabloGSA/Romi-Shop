@@ -39,7 +39,6 @@ export default function RegisterPage() {
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.message);
 
       toast.success("¡Cuenta creada exitosamente!");
@@ -53,80 +52,93 @@ export default function RegisterPage() {
 
   return (
     <Layout>
-      <div className="max-w-md mx-auto mt-10">
-        <div className="bg-white rounded-2xl shadow-sm p-8">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Crear cuenta</h1>
-          <p className="text-gray-500 mb-6 text-sm">Únete para poder comprar en nuestra tienda</p>
+      <div className="max-w-md mx-auto py-20">
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                placeholder="María García"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-rose-400"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="maria@ejemplo.com"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-rose-400"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                placeholder="Mínimo 6 caracteres"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-rose-400"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirmar contraseña</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-                placeholder="Repite tu contraseña"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-rose-400"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-rose-500 text-white py-3 rounded-lg font-semibold hover:bg-rose-600 transition disabled:opacity-50"
-            >
-              {loading ? "Creando cuenta..." : "Crear cuenta"}
-            </button>
-          </form>
-
-          <p className="text-center text-sm text-gray-500 mt-6">
-            ¿Ya tienes cuenta?{" "}
-            <Link href="/login" className="text-rose-500 hover:underline">
-              Inicia sesión
-            </Link>
-          </p>
+        {/* Encabezado */}
+        <div className="text-center mb-12">
+          <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Romi Antonucci</p>
+          <h1 className="text-3xl font-light text-gray-900 tracking-wide">Crear cuenta</h1>
         </div>
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+
+          <div>
+            <label className="text-xs uppercase tracking-widest text-gray-500 block mb-2">
+              Nombre completo
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              placeholder="Tu nombre"
+              className="w-full border-b border-gray-300 focus:border-black outline-none py-2 text-sm bg-transparent transition-colors placeholder-gray-300"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs uppercase tracking-widest text-gray-500 block mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="correo@ejemplo.com"
+              className="w-full border-b border-gray-300 focus:border-black outline-none py-2 text-sm bg-transparent transition-colors placeholder-gray-300"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs uppercase tracking-widest text-gray-500 block mb-2">
+              Contraseña
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              placeholder="Mínimo 6 caracteres"
+              className="w-full border-b border-gray-300 focus:border-black outline-none py-2 text-sm bg-transparent transition-colors placeholder-gray-300"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs uppercase tracking-widest text-gray-500 block mb-2">
+              Confirmar contraseña
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              placeholder="Repite tu contraseña"
+              className="w-full border-b border-gray-300 focus:border-black outline-none py-2 text-sm bg-transparent transition-colors placeholder-gray-300"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white py-4 text-sm uppercase tracking-widest hover:bg-gray-800 transition disabled:opacity-50"
+          >
+            {loading ? "Creando cuenta..." : "Crear cuenta"}
+          </button>
+        </form>
+
+        {/* Link a login */}
+        <p className="text-center text-xs text-gray-400 mt-10 uppercase tracking-widest">
+          ¿Ya tienes cuenta?{" "}
+          <Link href="/login" className="text-black border-b border-black hover:text-gray-600 hover:border-gray-600 transition pb-0.5">
+            Inicia sesión
+          </Link>
+        </p>
       </div>
     </Layout>
   );
