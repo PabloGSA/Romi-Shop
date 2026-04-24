@@ -51,13 +51,13 @@ export async function getServerSideProps(context) {
 // Función para mostrar el estado con color
 function BadgeEstado({ status }) {
   const estilos = {
-    pendiente: "bg-yellow-100 text-yellow-700",
-    pagado: "bg-green-100 text-green-700",
-    cancelado: "bg-red-100 text-red-700",
+    pendiente: "border-yellow-400 text-yellow-600",
+    pagado: "border-green-500 text-green-600",
+    cancelado: "border-red-400 text-red-500",
   };
 
   return (
-    <span className={`text-xs font-semibold px-3 py-1 rounded-full ${estilos[status] || "bg-gray-100 text-gray-600"}`}>
+    <span className={`text-xs uppercase tracking-widest px-3 py-1 border ${estilos[status] || "border-gray-300 text-gray-500"}`}>
       {status}
     </span>
   );
@@ -66,30 +66,34 @@ function BadgeEstado({ status }) {
 export default function MisPedidosPage({ pedidos }) {
   return (
     <Layout>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Mis pedidos</h1>
+
+      {/* Encabezado estilo Pandora */}
+      <div className="border-b border-gray-200 pb-6 mb-10">
+        <p className="text-xs uppercase tracking-widest text-gray-400 mb-1">Romi Antonucci</p>
+        <h1 className="text-3xl font-light text-gray-900 tracking-wide">Mis pedidos</h1>
+      </div>
 
       {pedidos.length === 0 ? (
-        // Si no tiene pedidos le mostramos un mensaje y un enlace a la tienda
-        <div className="text-center py-20">
-          <p className="text-5xl mb-4">📦</p>
-          <h2 className="text-xl font-semibold text-gray-700 mb-2">Todavía no tienes pedidos</h2>
-          <p className="text-gray-400 mb-6">Cuando realices una compra aparecerá aquí</p>
+        <div className="text-center py-24">
+          <p className="text-xs uppercase tracking-widest text-gray-400 mb-6">Sin pedidos</p>
+          <h2 className="text-2xl font-light text-gray-900 mb-3">Todavía no tienes pedidos</h2>
+          <p className="text-gray-400 text-sm mb-10">Cuando realices una compra aparecerá aquí</p>
           <Link
             href="/"
-            className="bg-rose-500 text-white px-6 py-3 rounded-full hover:bg-rose-600 transition"
+            className="border border-black text-black px-10 py-3 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition"
           >
-            Ver productos
+            Ver colección
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-0 divide-y divide-gray-100">
           {pedidos.map((pedido) => (
-            <div key={pedido.id} className="bg-white rounded-2xl shadow-sm p-6">
+            <div key={pedido.id} className="py-8">
 
-              {/* Cabecera del pedido: fecha, estado y total */}
-              <div className="flex items-center justify-between mb-4">
+              {/* Cabecera del pedido */}
+              <div className="flex items-center justify-between mb-5">
                 <div>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-xs uppercase tracking-widest text-gray-400 mb-1">
                     {new Date(pedido.createdAt).toLocaleDateString("es-ES", {
                       year: "numeric",
                       month: "long",
@@ -102,18 +106,21 @@ export default function MisPedidosPage({ pedidos }) {
               </div>
 
               {/* Lista de productos del pedido */}
-              <ul className="divide-y divide-gray-100 mb-4">
+              <ul className="divide-y divide-gray-100 mb-5">
                 {pedido.items.map((item, index) => (
-                  <li key={index} className="py-2 flex justify-between text-sm text-gray-600">
-                    <span>{item.name} <span className="text-gray-400">x{item.quantity}</span></span>
-                    <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+                  <li key={index} className="py-3 flex justify-between text-sm text-gray-600">
+                    <span>
+                      {item.name}
+                      <span className="text-gray-400 ml-2">x{item.quantity}</span>
+                    </span>
+                    <span className="font-medium text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
                   </li>
                 ))}
               </ul>
 
               {/* Total del pedido */}
-              <div className="flex justify-between font-bold text-gray-800 border-t pt-3">
-                <span>Total</span>
+              <div className="flex justify-between text-sm font-medium text-gray-900 border-t border-gray-100 pt-4">
+                <span className="uppercase tracking-widest text-xs">Total</span>
                 <span>${pedido.total.toFixed(2)}</span>
               </div>
             </div>
