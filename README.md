@@ -19,7 +19,7 @@ Desarrollado por [Pablo Sanchez](https://github.com/PabloGSA).
 | **connect-mongo** | Almacena las sesiones en MongoDB (persisten al reiniciar) |
 | **bcryptjs** | Cifrado seguro de contraseñas |
 | **Stripe** | Pasarela de pago (modo test) |
-| **Resend** | Servicio de envío de emails de confirmación |
+| **Email List Verify** | Servicio de envío de emails de confirmación |
 | **Tailwind CSS** | Estilos y diseño responsive (vía CDN) |
 | **dotenv** | Carga las variables de entorno desde el archivo `.env` |
 
@@ -115,7 +115,7 @@ bisuteria-shop/
 ├── lib/
 │   ├── mongodb.js              # Conexión a MongoDB (con caché para no repetir conexión)
 │   ├── stripe.js               # Instancia del cliente de Stripe
-│   ├── email.js                # Envío de emails de confirmación con Resend
+│   ├── email.js                # Envío de emails de confirmación con Email List Verify
 │   └── seedData.js             # Productos de ejemplo para la primera ejecución
 │
 ├── views/                      # Páginas HTML renderizadas con EJS
@@ -224,7 +224,7 @@ Usa cualquier fecha futura (ej: `12/28`) y cualquier CVC (ej: `123`).
 | `PORT` | Puerto del servidor (3000 por defecto) |
 | `STRIPE_SECRET_KEY` | Clave secreta de Stripe (empieza por `sk_test_`) |
 | `STRIPE_WEBHOOK_SECRET` | Clave del webhook de Stripe (empieza por `whsec_`) |
-| `EMAIL_LIST_VERIFY_API_KEY` | Clave de Email List Verify (opcional) |
+| `EMAIL_LIST_VERIFY_API_KEY` | Clave de Email List Verify para el envío de emails |
 
 ---
 
