@@ -71,7 +71,11 @@ export async function getServerSideProps(context) {
   const initialCategory = context.query.cat || "todos";
 
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const protocol =
+      context.req.headers["x-forwarded-proto"] ||
+      (process.env.NODE_ENV === "production" ? "https" : "http");
+    const host = context.req.headers["x-forwarded-host"] || context.req.headers.host;
+    const baseUrl = `${protocol}://${host}`;
     const res = await fetch(`${baseUrl}/api/products`);
     const products = await res.json();
     return { props: { products, initialCategory } };
