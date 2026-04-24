@@ -76,48 +76,54 @@ export async function getServerSideProps(context) {
 export default function SuccessPage({ order }) {
   return (
     <Layout>
-      <div className="max-w-lg mx-auto text-center py-20">
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <span className="text-4xl">✅</span>
+      <div className="max-w-3xl mx-auto py-20">
+        <div className="text-center border-b border-gray-200 pb-10 mb-10">
+          <p className="text-xs uppercase tracking-widest text-gray-400 mb-3">Romi Antonucci</p>
+          <div className="w-16 h-16 border border-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-2xl">✓</span>
+          </div>
+          <h1 className="text-4xl font-light text-gray-900 tracking-wide mb-3">Pago exitoso</h1>
+          <p className="text-gray-500">Tu pedido ha sido procesado correctamente.</p>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-800 mb-3">¡Pago exitoso!</h1>
-        <p className="text-gray-500 mb-2">Tu pedido ha sido procesado correctamente.</p>
-
         {order ? (
-          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 mb-8 text-left space-y-3">
-            <p className="text-green-700 text-sm font-semibold">Resumen del pedido:</p>
+          <div className="border border-gray-200 p-8 mb-8 text-left">
+            <p className="text-xs uppercase tracking-widest text-gray-500 mb-6">Resumen del pedido</p>
 
             <ul className="space-y-1">
               {order.items.map((item, index) => (
-                <li key={index} className="text-gray-600 text-sm flex justify-between">
+                <li key={index} className="text-sm text-gray-700 flex justify-between py-2 border-b border-gray-100">
                   <span>{item.name} x{item.quantity}</span>
                   <span>${(item.price * item.quantity).toFixed(2)}</span>
                 </li>
               ))}
             </ul>
 
-            <div className="border-t pt-2 flex justify-between font-semibold text-gray-700">
+            <div className="border-t border-gray-200 pt-4 mt-4 flex justify-between text-gray-900 font-medium">
               <span>Total</span>
               <span>${order.total.toFixed(2)}</span>
             </div>
 
-            <p className="text-green-700 text-sm">✓ Email: {order.userEmail}</p>
-            <p className="text-green-700 text-sm">✓ Estado: {order.status}</p>
+            <div className="mt-6 text-sm text-gray-500 space-y-2">
+              <p>Email: {order.userEmail}</p>
+              <p>Estado: {order.status}</p>
+            </div>
           </div>
         ) : (
-          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 mb-8 text-left space-y-2">
-            <p className="text-green-700 text-sm">✓ Pago procesado por Stripe</p>
-            <p className="text-green-700 text-sm">✓ Pedido confirmado</p>
+          <div className="border border-gray-200 p-8 mb-8 text-left space-y-2">
+            <p className="text-sm text-gray-600">Pago procesado por Stripe</p>
+            <p className="text-sm text-gray-600">Pedido confirmado</p>
           </div>
         )}
 
-        <Link
-          href="/"
-          className="bg-rose-500 text-white px-8 py-3 rounded-full hover:bg-rose-600 transition font-semibold"
-        >
-          Seguir comprando
-        </Link>
+        <div className="text-center">
+          <Link
+            href="/"
+            className="inline-block border border-black text-black px-10 py-3 text-sm uppercase tracking-widest hover:bg-black hover:text-white transition"
+          >
+            Seguir comprando
+          </Link>
+        </div>
       </div>
     </Layout>
   );
